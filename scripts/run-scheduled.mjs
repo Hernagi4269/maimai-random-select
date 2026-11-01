@@ -43,49 +43,48 @@ if (modes.length === 0) {
 }
 
 const database = await fetchOfficialSongs();
-const songById = new Map(database.songs.map((song) => [song.songId, song]));
-const withCurrentSongMetadata = (record) => {
-  const song = songById.get(record?.chart?.songId);
-  if (!song) return record;
-  return { ...record, chart: { ...record.chart, imageUrl: song.imageUrl ?? record.chart.imageUrl ?? null } };
-};
 const created = [];
 const toNotify = [];
+
 for (const source of modes) {
   const schedule = config[source];
   const key = periodKey(source, now, config.timeZone);
-  const id = `${source}:${key}`;
-  const existing = history.find((record) => record.id === id);
-  if (existing) {
-    console.log(`Already exists: ${id}`);
-    if (manualRun && notify) {
-      toNotify.push({ storedRecord: existing, sendRecord: withCurrentSongMetadata(existing) });
-      console.log(`Manual run: existing challenge will be resent to Discord: ${id}`);
+  const count = Math.max(1, Number.parseInt(schedule.count, 10) || 1);
+  const manualBatch = now.toISOString().replace(/[:.]/g, "-");
+
+  for (let index = 1; index <= count; index += 1) {
+    const slotKey = manualRun ? `${key}-manual-${manualBatch}-${index}` : `${key}:${index}`;
+    const id = `${source}:${slotKey}`;
+    const existing = history.find((record) => record.id === id);
+
+    if (existing) {
+      console.log(`Already exists: ${id}`);
+      continue;
     }
-    continue;
+
+    const result = drawChallenge({
+      songDatabase: database,
+      filters: schedule.filters,
+      history,
+      exclusion: schedule.exclusion,
+      achievement: schedule.achievement,
+      now,
+      random: () => randomInt(0, 1_000_000) / 1_000_000,
+    });
+    const record = createHistoryRecord({
+      source,
+      result,
+      filters: schedule.filters,
+      exclusion: schedule.exclusion,
+      now,
+      periodKey: slotKey,
+    });
+    history.unshift(record);
+    created.push(record);
+    toNotify.push(record);
+    historyChanged = true;
+    console.log(`${source} ${index}/${count}: ${record.chart.title} / ${record.chart.difficulty} ${record.chart.displayLevel} ${record.chart.type}`);
   }
-  const result = drawChallenge({
-    songDatabase: database,
-    filters: schedule.filters,
-    history,
-    exclusion: schedule.exclusion,
-    achievement: schedule.achievement,
-    now,
-    random: () => randomInt(0, 1_000_000) / 1_000_000,
-  });
-  const record = createHistoryRecord({
-    source,
-    result,
-    filters: schedule.filters,
-    exclusion: schedule.exclusion,
-    now,
-    periodKey: key,
-  });
-  history.unshift(record);
-  created.push(record);
-  toNotify.push({ storedRecord: record, sendRecord: record });
-  historyChanged = true;
-  console.log(`${source}: ${record.chart.title} / ${record.chart.difficulty} ${record.chart.displayLevel} ${record.chart.type}`);
 }
 
 if (dryRun) {
@@ -94,18 +93,13 @@ if (dryRun) {
 }
 
 if (notify) {
-  for (const { storedRecord, sendRecord } of toNotify) {
-    if (storedRecord.discordMessageId && !storedRecord.discordDeletedAt) {
-      const oldResult = await deleteDiscordWebhookMessage(process.env.DISCORD_WEBHOOK_URL, storedRecord.discordMessageId);
-      if (oldResult.skipped) throw new Error(`Discord replacement delete skipped unexpectedly: ${oldResult.reason}`);
-      console.log(`Discord previous message deleted before resend: ${storedRecord.id}`);
-    }
-    const result = await postDiscordWebhook(process.env.DISCORD_WEBHOOK_URL, sendRecord);
+  for (const record of toNotify) {
+    const result = await postDiscordWebhook(process.env.DISCORD_WEBHOOK_URL, record);
     if (result.skipped) throw new Error(`Discord skipped unexpectedly: ${result.reason}`);
-    storedRecord.discordMessageId = result.messageId;
-    storedRecord.discordDeletedAt = null;
+    record.discordMessageId = result.messageId;
+    record.discordDeletedAt = null;
     historyChanged = true;
-    console.log(`Discord sent: ${storedRecord.id} / message ${result.messageId}`);
+    console.log(`Discord sent: ${record.id} / message ${result.messageId}${result.jacketSource ? ` / jacket ${result.jacketSource}` : " / no jacket"}`);
   }
 }
 
