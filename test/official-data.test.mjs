@@ -10,6 +10,7 @@ const source = [{
   catcode: "maimai",
   version: "25000",
   release: "260101",
+  image_url: "test-jacket.png",
   lev_bas: "4",
   lev_adv: "8",
   lev_exp: "11+",
@@ -31,8 +32,9 @@ test("公式データを曲・譜面の統一形式へ正規化する", () => {
   assert.equal(database.stats.charts, 9);
 });
 
-test("画像URLや未使用の公式フィールドは正規化データへ転載しない", () => {
-  const database = normalizeOfficialSongs([{ ...source[0], image_url: "copyrighted.png", secret: "unused" }]);
+test("公式image_urlを画像ファイル名として安全にジャケットURLへ変換する", () => {
+  const database = normalizeOfficialSongs([{ ...source[0], secret: "unused" }]);
+  assert.equal(database.songs[0].imageUrl, "https://maimaidx.jp/maimai-mobile/img/Music/test-jacket.png");
   assert.equal("image_url" in database.songs[0], false);
   assert.equal("secret" in database.songs[0], false);
 });
@@ -42,4 +44,3 @@ test("バージョン枝番を対応するメジャーバージョンへまと�
   assert.equal(versionName("26599"), "CiRCLE PLUS");
   assert.equal(versionName("27000"), "MAGiCAL");
 });
-
