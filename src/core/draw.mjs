@@ -2,6 +2,7 @@ import { isLevelInRange } from "./levels.mjs";
 
 export const DIFFICULTIES = ["BASIC", "ADVANCED", "EXPERT", "MASTER", "Re:MASTER"];
 export const CHART_TYPES = ["STD", "DX"];
+export const CHALLENGE_DEADLINE_DAYS = 21;
 
 export class NoCandidatesError extends Error {
   constructor(message = "条件に一致する譜面がありません。") {
@@ -104,11 +105,14 @@ export function drawChallenge({ songDatabase, filters, history = [], exclusion =
 
 export function createHistoryRecord({ source, result, filters, exclusion, now = new Date(), periodKey = null }) {
   const drawnAt = now.toISOString();
+  const deadline = new Date(now);
+  deadline.setUTCDate(deadline.getUTCDate() + CHALLENGE_DEADLINE_DAYS);
   return {
     id: periodKey ? `${source}:${periodKey}` : `manual:${drawnAt}:${result.chart.chartId}`,
     source,
     periodKey,
     drawnAt,
+    deadlineAt: deadline.toISOString(),
     chart: { ...result.chart },
     achievement: result.achievement,
     filters: structuredClone(filters),
