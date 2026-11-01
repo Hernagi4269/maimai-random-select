@@ -19,6 +19,7 @@ export function flattenCharts(songDatabase) {
     .filter((song) => song.available !== false)
     .flatMap((song) => (song.charts ?? []).map((chart) => ({
       songId: song.songId,
+      sourceSongId: song.sourceSongId ?? null,
       title: song.title,
       artist: song.artist,
       genre: song.genre,
