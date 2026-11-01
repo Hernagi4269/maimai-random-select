@@ -28,6 +28,12 @@ if (notify && !process.env.DISCORD_WEBHOOK_URL) {
 }
 
 const database = await fetchOfficialSongs();
+const songById = new Map(database.songs.map((song) => [song.songId, song]));
+const withCurrentSongMetadata = (record) => {
+  const song = songById.get(record?.chart?.songId);
+  if (!song) return record;
+  return { ...record, chart: { ...record.chart, imageUrl: song.imageUrl ?? record.chart.imageUrl ?? null } };
+};
 const created = [];
 const toNotify = [];
 for (const source of modes) {
@@ -38,7 +44,7 @@ for (const source of modes) {
   if (existing) {
     console.log(`Already exists: ${id}`);
     if (manualRun && notify) {
-      toNotify.push(existing);
+      toNotify.push(withCurrentSongMetadata(existing));
       console.log(`Manual run: existing challenge will be resent to Discord: ${id}`);
     }
     continue;
