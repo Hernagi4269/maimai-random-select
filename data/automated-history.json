@@ -41,7 +41,9 @@
         "days": 84,
         "relaxWhenEmpty": true
       },
-      "exclusionRelaxed": false
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566470576334180436",
+      "discordDeletedAt": null
     },
     {
       "id": "weekly:2026-W44",
