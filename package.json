@@ -1,0 +1,20 @@
+{
+  "name": "maimai-random-select",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "現行の maimai でらっくす譜面から課題曲を抽選する静的Webアプリ",
+  "scripts": {
+    "build": "node --use-system-ca scripts/build.mjs",
+    "data:update": "node --use-system-ca scripts/fetch-songs.mjs",
+    "dev": "node --use-system-ca scripts/dev-server.mjs",
+    "scheduled": "node --use-system-ca scripts/run-scheduled.mjs",
+    "test": "node --test",
+    "check": "npm test"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "license": "MIT"
+}
+

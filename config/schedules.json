@@ -1,0 +1,42 @@
+{
+  "timeZone": "Asia/Tokyo",
+  "weekly": {
+    "enabled": true,
+    "weekDay": 1,
+    "achievement": "AP",
+    "filters": {
+      "difficulties": ["MASTER"],
+      "levelMin": "13+",
+      "levelMax": "14+",
+      "types": ["STD", "DX"],
+      "genres": [],
+      "versions": []
+    },
+    "exclusion": {
+      "unit": "song",
+      "recentCount": 12,
+      "days": 84,
+      "relaxWhenEmpty": true
+    }
+  },
+  "monthly": {
+    "enabled": true,
+    "dayOfMonth": 1,
+    "achievement": "SSS+",
+    "filters": {
+      "difficulties": ["MASTER", "Re:MASTER"],
+      "levelMin": "14",
+      "levelMax": "15",
+      "types": ["STD", "DX"],
+      "genres": [],
+      "versions": []
+    },
+    "exclusion": {
+      "unit": "song",
+      "recentCount": 6,
+      "days": 180,
+      "relaxWhenEmpty": true
+    }
+  }
+}
+

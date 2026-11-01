@@ -1,0 +1,63 @@
+name: Draw scheduled challenge
+
+on:
+  schedule:
+    # 毎日 06:05 JSTに起動し、config/schedules.jsonで当日が週/月課題日か判定します。
+    - cron: "5 21 * * *"
+  workflow_dispatch:
+    inputs:
+      challenge_type:
+        description: "抽選する課題"
+        required: true
+        default: weekly
+        type: choice
+        options: [weekly, monthly]
+      send_discord:
+        description: "Discordへ投稿する"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: scheduled-challenge
+  cancel-in-progress: false
+
+jobs:
+  draw:
+    runs-on: ubuntu-latest
+    env:
+      DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - name: Draw challenge (scheduled)
+        if: github.event_name == 'schedule'
+        run: npm run scheduled -- --mode=auto --notify
+      - name: Draw challenge (manual)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          CHALLENGE_TYPE: ${{ inputs.challenge_type }}
+          SEND_DISCORD: ${{ inputs.send_discord }}
+        run: npm run scheduled
+      - name: Persist history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/automated-history.json
+          if git diff --cached --quiet; then
+            echo "No new challenge to commit."
+          else
+            git commit -m "chore: record scheduled challenge"
+            git push
+          fi
+

@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#071c21">
+  <meta name="description" content="現在遊べるmaimai でらっくす譜面から、条件を指定して課題曲を抽選します。">
+  <title>maimai 課題曲セレクター</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="#top" aria-label="トップへ">
+      <span class="brand-mark" aria-hidden="true">M</span>
+      <span><strong>課題曲セレクター</strong><small>maimai でらっくす</small></span>
+    </a>
+    <button id="open-settings" class="icon-button" type="button" aria-label="重複除外設定を開く">設定</button>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="hero" aria-labelledby="hero-title">
+      <p class="eyebrow">RANDOM CHALLENGE</p>
+      <h1 id="hero-title">今日の一曲を、<br><em>迷わず決める。</em></h1>
+      <div class="data-status" aria-live="polite">
+        <span id="data-dot" class="status-dot"></span>
+        <span id="data-status">楽曲データを読み込み中…</span>
+      </div>
+    </section>
+
+    <section class="panel filter-panel" aria-labelledby="filter-title">
+      <div class="section-heading">
+        <div><span class="step">01</span><h2 id="filter-title">抽選条件</h2></div>
+        <span id="candidate-count" class="count-badge">— 譜面</span>
+      </div>
+
+      <form id="draw-form">
+        <fieldset>
+          <legend>難易度</legend>
+          <div class="chip-grid difficulty-grid">
+            <label class="chip adv"><input type="checkbox" name="difficulty" value="ADVANCED"><span>ADV</span></label>
+            <label class="chip exp"><input type="checkbox" name="difficulty" value="EXPERT"><span>EXP</span></label>
+            <label class="chip mas"><input type="checkbox" name="difficulty" value="MASTER" checked><span>MAS</span></label>
+            <label class="chip remas"><input type="checkbox" name="difficulty" value="Re:MASTER"><span>Re:MAS</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>表示Lv</legend>
+          <div class="range-row">
+            <label><span>下限</span><select id="level-min" name="levelMin"></select></label>
+            <span class="range-separator">—</span>
+            <label><span>上限</span><select id="level-max" name="levelMax"></select></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>譜面タイプ</legend>
+          <div class="segmented">
+            <label><input type="checkbox" name="type" value="STD" checked><span>STD</span></label>
+            <label><input type="checkbox" name="type" value="DX" checked><span>DX</span></label>
+          </div>
+        </fieldset>
+
+        <label class="select-block"><span>達成目標</span>
+          <select id="achievement" name="achievement">
+            <option>クリア</option><option>SSS</option><option>SSS+</option><option>FC</option><option>FC+</option>
+            <option selected>AP</option><option>AP+</option><option>DX SCORE ★5</option><option>理論値</option><option>記録更新</option>
+          </select>
+        </label>
+
+        <details class="advanced-filters">
+          <summary>ジャンル・追加バージョンで絞り込む</summary>
+          <div class="details-body">
+            <label class="select-block"><span>ジャンル</span><select id="genre"><option value="">すべて</option></select></label>
+            <label class="select-block"><span>追加バージョン</span><select id="version"><option value="">すべて</option></select></label>
+          </div>
+        </details>
+
+        <p id="form-error" class="form-error" role="alert" hidden></p>
+        <button id="draw-button" class="primary-button" type="submit" disabled>
+          <span>課題曲を抽選</span><span aria-hidden="true">→</span>
+        </button>
+      </form>
+    </section>
+
+    <section id="result-section" class="panel result-panel is-empty" aria-labelledby="result-title">
+      <div class="section-heading">
+        <div><span class="step">02</span><h2 id="result-title">抽選結果</h2></div>
+      </div>
+      <div id="empty-result" class="empty-state">
+        <span class="empty-disc" aria-hidden="true"></span>
+        <p>条件を決めて抽選すると<br>ここに課題曲が表示されます。</p>
+      </div>
+      <article id="result-card" class="challenge-card" hidden>
+        <div class="result-accent"></div>
+        <p id="result-genre" class="result-kicker"></p>
+        <h3 id="result-song"></h3>
+        <p id="result-artist" class="result-artist"></p>
+        <div class="chart-facts">
+          <span id="result-difficulty"></span><span id="result-level"></span><span id="result-type"></span>
+        </div>
+        <div class="goal-row"><span>GOAL</span><strong id="result-goal"></strong></div>
+        <p id="result-warning" class="result-warning" hidden></p>
+        <p id="result-meta" class="result-meta"></p>
+      </article>
+      <div id="result-actions" class="result-actions" hidden>
+        <button id="reroll-button" class="secondary-button" type="button">もう一度</button>
+        <button id="confirm-button" class="primary-button" type="button">この課題に決定</button>
+      </div>
+    </section>
+
+    <section class="panel history-panel" aria-labelledby="history-title">
+      <div class="section-heading">
+        <div><span class="step">03</span><h2 id="history-title">課題履歴</h2></div>
+        <select id="history-filter" aria-label="履歴の種類">
+          <option value="all">すべて</option><option value="manual">手動</option><option value="weekly">週課題</option><option value="monthly">月課題</option>
+        </select>
+      </div>
+      <ol id="history-list" class="history-list"></ol>
+      <p id="history-empty" class="empty-history">確定した課題はまだありません。</p>
+      <div class="history-tools">
+        <button id="export-history" class="text-button" type="button">履歴を書き出す</button>
+        <label class="text-button file-button">履歴を読み込む<input id="import-history" type="file" accept="application/json"></label>
+        <button id="clear-history" class="text-button danger" type="button">手動履歴を消去</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>非公式ファンツールです。株式会社セガとは関係ありません。</p>
+    <p>楽曲メタデータ: <a href="https://maimai.sega.jp/song/" rel="noreferrer">maimai でらっくす公式 楽曲リスト</a></p>
+  </footer>
+
+  <dialog id="settings-dialog">
+    <form method="dialog" class="dialog-shell">
+      <div class="dialog-heading"><div><p class="eyebrow">REPEAT GUARD</p><h2>重複除外設定</h2></div><button class="close-button" value="cancel" aria-label="閉じる">×</button></div>
+      <label class="select-block"><span>同じものとみなす単位</span><select id="exclude-unit"><option value="song">同じ曲</option><option value="chart">同じ譜面</option></select></label>
+      <div class="range-row settings-range">
+        <label><span>直近</span><input id="exclude-count" type="number" min="0" max="200" inputmode="numeric"><small>回</small></label>
+        <label><span>過去</span><input id="exclude-days" type="number" min="0" max="3650" inputmode="numeric"><small>日</small></label>
+      </div>
+      <label class="toggle-row"><input id="relax-empty" type="checkbox"><span>候補が0件なら重複除外だけ解除する</span></label>
+      <p class="dialog-note">難易度やLvなどの抽選条件は解除しません。設定はこの端末に保存されます。</p>
+      <button id="save-settings" class="primary-button" value="default">設定を保存</button>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./app.mjs"></script>
+</body>
+</html>
+
