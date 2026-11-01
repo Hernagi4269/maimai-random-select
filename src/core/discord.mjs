@@ -1,6 +1,6 @@
 const COLORS = { weekly: 0x6de2c8, monthly: 0xffc857, manual: 0xb79cff };
 
-export function buildDiscordPayload(record) {
+export function buildDiscordPayload(record, options = {}) {
   const labels = { weekly: "今週のmaimai課題曲", monthly: "今月のmaimai課題曲", manual: "maimai課題曲" };
   const chart = record.chart;
   const embed = {
@@ -18,7 +18,9 @@ export function buildDiscordPayload(record) {
     footer: { text: `課題ID: ${record.id}` },
     timestamp: record.drawnAt,
   };
-  if (chart.imageUrl) embed.thumbnail = { url: chart.imageUrl };
+
+  if (options.attachmentName) embed.thumbnail = { url: `attachment://${options.attachmentName}` };
+  else if (chart.imageUrl) embed.thumbnail = { url: chart.imageUrl };
 
   return {
     username: "maimai 課題曲セレクター",
@@ -27,13 +29,50 @@ export function buildDiscordPayload(record) {
   };
 }
 
+async function fetchJacket(imageUrl, fetchImpl) {
+  if (!imageUrl) return null;
+  try {
+    const response = await fetchImpl(imageUrl, {
+      headers: {
+        "user-agent": "Mozilla/5.0 maimai-random-select/1.0",
+        referer: "https://maimai.sega.jp/",
+      },
+    });
+    if (!response.ok) {
+      console.warn(`Jacket fetch failed: HTTP ${response.status}`);
+      return null;
+    }
+    const contentType = response.headers?.get?.("content-type") || "image/png";
+    const bytes = await response.arrayBuffer();
+    if (!bytes.byteLength) return null;
+    return { bytes, contentType };
+  } catch (error) {
+    console.warn(`Jacket fetch failed: ${error.message}`);
+    return null;
+  }
+}
+
 export async function postDiscordWebhook(url, record, fetchImpl = fetch) {
   if (!url) return { skipped: true, reason: "DISCORD_WEBHOOK_URL is not set" };
-  const response = await fetchImpl(url, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(buildDiscordPayload(record)),
-  });
+
+  const jacket = await fetchJacket(record.chart.imageUrl, fetchImpl);
+  let response;
+
+  if (jacket) {
+    const extension = jacket.contentType.includes("jpeg") ? "jpg" : jacket.contentType.includes("webp") ? "webp" : "png";
+    const attachmentName = `jacket.${extension}`;
+    const form = new FormData();
+    form.append("payload_json", JSON.stringify(buildDiscordPayload(record, { attachmentName })));
+    form.append("files[0]", new Blob([jacket.bytes], { type: jacket.contentType }), attachmentName);
+    response = await fetchImpl(url, { method: "POST", body: form });
+  } else {
+    response = await fetchImpl(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(buildDiscordPayload(record)),
+    });
+  }
+
   if (!response.ok) throw new Error(`Discord Webhook failed: HTTP ${response.status}`);
-  return { skipped: false };
+  return { skipped: false, jacketUploaded: Boolean(jacket) };
 }
