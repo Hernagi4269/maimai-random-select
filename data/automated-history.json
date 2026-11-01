@@ -2,6 +2,144 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "weekly:2026-W45-manual-2026-11-01T15-40-27-503Z-3",
+      "source": "weekly",
+      "periodKey": "2026-W45-manual-2026-11-01T15-40-27-503Z-3",
+      "drawnAt": "2026-11-01T15:40:27.503Z",
+      "deadlineAt": "2026-11-22T15:40:27.503Z",
+      "chart": {
+        "songId": "sega-645-13nt57",
+        "sourceSongId": "645",
+        "title": "Calamity Fortune",
+        "artist": "LeaF",
+        "genre": "東方Project",
+        "version": "MURASAKi PLUS",
+        "versionCode": "18512",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/f909efa99e6ff90b.png",
+        "available": true,
+        "chartId": "sega-645-13nt57:STD:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "14",
+        "internalLevel": null,
+        "type": "STD"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "13+",
+        "levelMax": "14+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566477035906277528",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W45-manual-2026-11-01T15-40-27-503Z-2",
+      "source": "weekly",
+      "periodKey": "2026-W45-manual-2026-11-01T15-40-27-503Z-2",
+      "drawnAt": "2026-11-01T15:40:27.503Z",
+      "deadlineAt": "2026-11-22T15:40:27.503Z",
+      "chart": {
+        "songId": "sega-397-1hq0wvc",
+        "sourceSongId": "397",
+        "title": "裏表ラバーズ",
+        "artist": "wowaka",
+        "genre": "niconico＆ボーカロイド",
+        "version": "GreeN",
+        "versionCode": "12006",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/1c9f188e15b13d2b.png",
+        "available": true,
+        "chartId": "sega-397-1hq0wvc:STD:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13+",
+        "internalLevel": null,
+        "type": "STD"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "13+",
+        "levelMax": "14+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566477034773938288",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W45-manual-2026-11-01T15-40-27-503Z-1",
+      "source": "weekly",
+      "periodKey": "2026-W45-manual-2026-11-01T15-40-27-503Z-1",
+      "drawnAt": "2026-11-01T15:40:27.503Z",
+      "deadlineAt": "2026-11-22T15:40:27.503Z",
+      "chart": {
+        "songId": "sega-1490-1cygk6m",
+        "sourceSongId": "1490",
+        "title": "BOUNCE & DANCE",
+        "artist": "IOSYS TRAX",
+        "genre": "オンゲキ＆CHUNITHM",
+        "version": "Splash PLUS",
+        "versionCode": "21513",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/5978cd4680adbdf1.png",
+        "available": true,
+        "chartId": "sega-1490-1cygk6m:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13+",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "13+",
+        "levelMax": "14+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566477034384007311",
+      "discordDeletedAt": null
+    },
+    {
       "id": "weekly:2026-W45-manual-2026-11-01T15-24-35-257Z-3",
       "source": "weekly",
       "periodKey": "2026-W45-manual-2026-11-01T15-24-35-257Z-3",
