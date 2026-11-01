@@ -26,14 +26,15 @@ test("期間キーが週・月で安定する", () => {
 
 const record = {
   id: "weekly:2026-W45", source: "weekly", drawnAt: "2026-11-02T00:00:00.000Z", achievement: "AP",
-  chart: { title: "Alpha", artist: "Artist", difficulty: "MASTER", displayLevel: "14", type: "DX", genre: "maimai", version: "CiRCLE" },
+  chart: { title: "Alpha", artist: "Artist", difficulty: "MASTER", displayLevel: "14", type: "DX", genre: "maimai", version: "CiRCLE", imageUrl: "https://maimaidx.jp/maimai-mobile/img/Music/test.png" },
 };
 
-test("Discord Embedに曲・譜面・Lv・タイプ・目標を含める", () => {
+test("Discord Embedに曲・譜面・Lv・タイプ・目標・ジャケットを含める", () => {
   const payload = buildDiscordPayload(record);
   assert.equal(payload.embeds[0].title, "今週のmaimai課題曲");
   assert.match(payload.embeds[0].description, /Alpha/);
   assert.deepEqual(payload.embeds[0].fields.slice(0, 4).map((field) => field.value), ["MASTER", "14", "DX", "AP"]);
+  assert.equal(payload.embeds[0].thumbnail.url, record.chart.imageUrl);
   assert.deepEqual(payload.allowed_mentions, { parse: [] });
 });
 
@@ -47,4 +48,3 @@ test("Discord送信処理を外部送信なしでモック検証できる", asyn
   assert.equal(request.options.method, "POST");
   assert.equal(JSON.parse(request.options.body).embeds[0].footer.text, "課題ID: weekly:2026-W45");
 });
-
