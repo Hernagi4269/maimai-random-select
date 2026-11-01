@@ -2,6 +2,144 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "weekly:2026-W45-manual-2026-11-01T15-48-50-194Z-3",
+      "source": "weekly",
+      "periodKey": "2026-W45-manual-2026-11-01T15-48-50-194Z-3",
+      "drawnAt": "2026-11-01T15:48:50.194Z",
+      "deadlineAt": "2026-11-22T15:48:50.194Z",
+      "chart": {
+        "songId": "sega-1002-1ytbobb",
+        "sourceSongId": "1002",
+        "title": "I’m Here (feat. Merry Kirk-Holmes)",
+        "artist": "大谷智哉「ソニックフロンティア」",
+        "genre": "ゲーム＆バラエティ",
+        "version": "BUDDiES",
+        "versionCode": "24007",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/80be5642b2087e7e.png",
+        "available": true,
+        "chartId": "sega-1002-1ytbobb:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566479144416579695",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W45-manual-2026-11-01T15-48-50-194Z-2",
+      "source": "weekly",
+      "periodKey": "2026-W45-manual-2026-11-01T15-48-50-194Z-2",
+      "drawnAt": "2026-11-01T15:48:50.194Z",
+      "deadlineAt": "2026-11-22T15:48:50.194Z",
+      "chart": {
+        "songId": "sega-515-9r1si6",
+        "sourceSongId": "515",
+        "title": "踊れオーケストラ",
+        "artist": "YASUHIRO(康寛)",
+        "genre": "niconico＆ボーカロイド",
+        "version": "MURASAKi",
+        "versionCode": "18005",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/6fdaa71c47264392.png",
+        "available": true,
+        "chartId": "sega-515-9r1si6:STD:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "12",
+        "internalLevel": null,
+        "type": "STD"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566479143611269172",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W45-manual-2026-11-01T15-48-50-194Z-1",
+      "source": "weekly",
+      "periodKey": "2026-W45-manual-2026-11-01T15-48-50-194Z-1",
+      "drawnAt": "2026-11-01T15:48:50.194Z",
+      "deadlineAt": "2026-11-22T15:48:50.194Z",
+      "chart": {
+        "songId": "sega-295-1arqm9r",
+        "sourceSongId": "295",
+        "title": "千本桜",
+        "artist": "黒うさP",
+        "genre": "niconico＆ボーカロイド",
+        "version": "maimai PLUS",
+        "versionCode": "11000",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/fa67a0cdb0ac0035.png",
+        "available": true,
+        "chartId": "sega-295-1arqm9r:STD:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13",
+        "internalLevel": null,
+        "type": "STD"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566479142487072945",
+      "discordDeletedAt": null
+    },
+    {
       "id": "weekly:2026-W45-manual-2026-11-01T15-40-27-503Z-3",
       "source": "weekly",
       "periodKey": "2026-W45-manual-2026-11-01T15-40-27-503Z-3",
