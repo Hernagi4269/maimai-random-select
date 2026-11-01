@@ -71,7 +71,14 @@ function makeResultCard(result, index) {
   const goal = document.createElement("div"); goal.className = "goal-row"; const goalLabel = document.createElement("span"); goalLabel.textContent = "GOAL"; const goalValue = document.createElement("strong"); goalValue.textContent = result.achievement; goal.append(goalLabel, goalValue);
   const warning = document.createElement("p"); warning.className = "result-warning"; warning.textContent = result.exclusionRelaxed ? "重複除外で候補が0件になったため、抽選条件は維持したまま重複除外だけ解除しました。" : ""; warning.hidden = !result.exclusionRelaxed;
   const meta = document.createElement("p"); meta.className = "result-meta"; meta.textContent = `条件一致 ${result.matchedCount}譜面 / 今回の抽選対象 ${result.eligibleCount}譜面`;
-  article.append(accent, kicker, title, artist, facts, goal, warning, meta); return article;
+  const contents = [accent, kicker];
+  if (chart.imageUrl) {
+    const jacket = document.createElement("img");
+    jacket.src = chart.imageUrl; jacket.alt = `${chart.title} ジャケット`; jacket.loading = "lazy"; jacket.referrerPolicy = "no-referrer";
+    jacket.style.cssText = "display:block;width:min(46vw,180px);aspect-ratio:1;object-fit:cover;margin:0 0 18px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:#071c21;";
+    contents.push(jacket);
+  }
+  article.append(...contents, title, artist, facts, goal, warning, meta); return article;
 }
 function renderResults() {
   if (currentResults.length === 0) return;
