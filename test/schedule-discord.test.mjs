@@ -29,38 +29,31 @@ const record = {
   chart: { title: "Alpha", artist: "Artist", difficulty: "MASTER", displayLevel: "14", type: "DX", genre: "maimai", version: "CiRCLE", imageUrl: "https://maimaidx.jp/maimai-mobile/img/Music/test.png" },
 };
 
-test("Discord Embedに曲・譜面・Lv・タイプ・目標・期限・ジャケットを含める", () => {
+test("Discord Embedに曲・譜面・Lv・タイプ・目標・期限を含み、ジャケットは表示しない", () => {
   const payload = buildDiscordPayload(record);
   assert.equal(payload.embeds[0].title, "今週のmaimai課題曲");
   assert.match(payload.embeds[0].description, /Alpha/);
   assert.deepEqual(payload.embeds[0].fields.slice(0, 4).map((field) => field.value), ["MASTER", "14", "DX", "AP"]);
   assert.match(payload.embeds[0].fields.find((field) => field.name === "期限").value, /2026\/11\/23/);
-  assert.equal(payload.embeds[0].thumbnail.url, record.chart.imageUrl);
+  assert.equal(payload.embeds[0].thumbnail, undefined);
   assert.deepEqual(payload.allowed_mentions, { parse: [] });
 });
 
-test("ジャケットを取得してDiscordへ添付し、メッセージIDを取得する", async () => {
+test("ジャケットなしでDiscordへ投稿し、メッセージIDを取得する", async () => {
   const requests = [];
   const result = await postDiscordWebhook("https://example.invalid/webhook", record, async (url, options = {}) => {
     requests.push({ url, options });
-    if (url === record.chart.imageUrl) {
-      return {
-        ok: true,
-        status: 200,
-        headers: { get: () => "image/png" },
-        arrayBuffer: async () => new Uint8Array([137, 80, 78, 71]).buffer,
-      };
-    }
     return { ok: true, status: 200, json: async () => ({ id: "123456789" }) };
   });
   assert.equal(result.skipped, false);
-  assert.equal(result.jacketUploaded, true);
+  assert.equal(result.jacketUploaded, false);
   assert.equal(result.messageId, "123456789");
-  assert.match(requests[1].url, /wait=true/);
-  assert.equal(requests[1].options.method, "POST");
-  assert.ok(requests[1].options.body instanceof FormData);
-  const payload = JSON.parse(requests[1].options.body.get("payload_json"));
-  assert.equal(payload.embeds[0].thumbnail.url, "attachment://jacket.png");
+  assert.equal(requests.length, 1);
+  assert.match(requests[0].url, /wait=true/);
+  assert.equal(requests[0].options.method, "POST");
+  assert.equal(requests[0].options.headers["content-type"], "application/json");
+  const payload = JSON.parse(requests[0].options.body);
+  assert.equal(payload.embeds[0].thumbnail, undefined);
 });
 
 test("抽選から3週間で期限切れになる", () => {
