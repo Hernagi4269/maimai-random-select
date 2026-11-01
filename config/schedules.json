@@ -7,8 +7,8 @@
     "achievement": "AP",
     "filters": {
       "difficulties": ["MASTER"],
-      "levelMin": "13+",
-      "levelMax": "14+",
+      "levelMin": "12",
+      "levelMax": "13+",
       "types": ["STD", "DX"],
       "genres": [],
       "versions": []
