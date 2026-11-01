@@ -50,27 +50,50 @@ export function buildDiscordPayload(record, options = {}) {
   };
 }
 
-async function fetchJacket(imageUrl, fetchImpl) {
-  if (!imageUrl) return null;
-  try {
-    const response = await fetchImpl(imageUrl, {
-      headers: {
-        "user-agent": "Mozilla/5.0 maimai-random-select/1.0",
-        referer: "https://maimai.sega.jp/",
-      },
+function jacketCandidates(chart) {
+  const candidates = [];
+  if (chart.imageUrl) candidates.push({ url: chart.imageUrl, referer: "https://maimai.sega.jp/", source: "SEGA/maimai DX NET" });
+
+  const numericId = Number.parseInt(chart.sourceSongId, 10);
+  if (Number.isFinite(numericId) && numericId > 0) {
+    const divingFishId = numericId > 10000 && numericId <= 11000 ? numericId - 10000 : numericId;
+    candidates.push({
+      url: `https://www.diving-fish.com/covers/${String(divingFishId).padStart(5, "0")}.png`,
+      referer: "https://maimai.diving-fish.com/",
+      source: "Diving-Fish",
     });
-    if (!response.ok) {
-      console.warn(`Jacket fetch failed: HTTP ${response.status}`);
-      return null;
-    }
-    const contentType = response.headers?.get?.("content-type") || "image/png";
-    const bytes = await response.arrayBuffer();
-    if (!bytes.byteLength) return null;
-    return { bytes, contentType };
-  } catch (error) {
-    console.warn(`Jacket fetch failed: ${error.message}`);
-    return null;
+    candidates.push({
+      url: `https://assets2.lxns.net/maimai/jacket/${numericId}.png`,
+      referer: "https://maimai.lxns.net/",
+      source: "LXNS",
+    });
   }
+  return candidates;
+}
+
+async function fetchJacket(chart, fetchImpl) {
+  for (const candidate of jacketCandidates(chart)) {
+    try {
+      const response = await fetchImpl(candidate.url, {
+        headers: {
+          "user-agent": "Mozilla/5.0 maimai-random-select/1.0",
+          referer: candidate.referer,
+        },
+      });
+      if (!response.ok) {
+        console.warn(`Jacket fetch failed (${candidate.source}): HTTP ${response.status}`);
+        continue;
+      }
+      const contentType = response.headers?.get?.("content-type") || "image/png";
+      const bytes = await response.arrayBuffer();
+      if (!bytes.byteLength) continue;
+      console.log(`Jacket fetched from ${candidate.source}`);
+      return { bytes, contentType, source: candidate.source };
+    } catch (error) {
+      console.warn(`Jacket fetch failed (${candidate.source}): ${error.message}`);
+    }
+  }
+  return null;
 }
 
 function webhookMessageUrl(url, messageId) {
@@ -80,7 +103,7 @@ function webhookMessageUrl(url, messageId) {
 export async function postDiscordWebhook(url, record, fetchImpl = fetch) {
   if (!url) return { skipped: true, reason: "DISCORD_WEBHOOK_URL is not set" };
 
-  const jacket = await fetchJacket(record.chart.imageUrl, fetchImpl);
+  const jacket = await fetchJacket(record.chart, fetchImpl);
   const targetUrl = `${url}${url.includes("?") ? "&" : "?"}wait=true`;
   let response;
 
@@ -102,7 +125,7 @@ export async function postDiscordWebhook(url, record, fetchImpl = fetch) {
   if (!response.ok) throw new Error(`Discord Webhook failed: HTTP ${response.status}`);
   const message = await response.json();
   if (!message?.id) throw new Error("Discord Webhook succeeded but returned no message ID.");
-  return { skipped: false, jacketUploaded: Boolean(jacket), messageId: String(message.id) };
+  return { skipped: false, jacketUploaded: Boolean(jacket), jacketSource: jacket?.source ?? null, messageId: String(message.id) };
 }
 
 export async function deleteDiscordWebhookMessage(url, messageId, fetchImpl = fetch) {
