@@ -1,6 +1,6 @@
 {
-  "name": "maimai 課題曲選曲サイト",
-  "short_name": "課題曲選曲",
+  "name": "課題曲セレクター",
+  "short_name": "課題曲セレクター",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#071c21",
