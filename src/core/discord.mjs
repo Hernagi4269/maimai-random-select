@@ -1,7 +1,7 @@
 const COLORS = { weekly: 0x6de2c8, monthly: 0xffc857, manual: 0xb79cff };
 const DEADLINE_DAYS = 21;
 
-function deadlineAt(record) {
+function deadlineDate(record) {
   if (record.deadlineAt) return new Date(record.deadlineAt);
   const deadline = new Date(record.drawnAt);
   deadline.setUTCDate(deadline.getUTCDate() + DEADLINE_DAYS);
@@ -9,13 +9,15 @@ function deadlineAt(record) {
 }
 
 function formatDeadline(record) {
+  const date = deadlineDate(record);
+  if (Number.isNaN(date.getTime())) return "—";
   return new Intl.DateTimeFormat("ja-JP", {
     timeZone: "Asia/Tokyo",
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
     weekday: "short",
-  }).format(deadlineAt(record));
+  }).format(date);
 }
 
 export function buildDiscordPayload(record, options = {}) {
@@ -71,10 +73,15 @@ async function fetchJacket(imageUrl, fetchImpl) {
   }
 }
 
+function webhookMessageUrl(url, messageId) {
+  return `${url.replace(/\/$/, "")}/messages/${encodeURIComponent(messageId)}`;
+}
+
 export async function postDiscordWebhook(url, record, fetchImpl = fetch) {
   if (!url) return { skipped: true, reason: "DISCORD_WEBHOOK_URL is not set" };
 
   const jacket = await fetchJacket(record.chart.imageUrl, fetchImpl);
+  const targetUrl = `${url}${url.includes("?") ? "&" : "?"}wait=true`;
   let response;
 
   if (jacket) {
@@ -83,9 +90,9 @@ export async function postDiscordWebhook(url, record, fetchImpl = fetch) {
     const form = new FormData();
     form.append("payload_json", JSON.stringify(buildDiscordPayload(record, { attachmentName })));
     form.append("files[0]", new Blob([jacket.bytes], { type: jacket.contentType }), attachmentName);
-    response = await fetchImpl(url, { method: "POST", body: form });
+    response = await fetchImpl(targetUrl, { method: "POST", body: form });
   } else {
-    response = await fetchImpl(url, {
+    response = await fetchImpl(targetUrl, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify(buildDiscordPayload(record)),
@@ -93,5 +100,21 @@ export async function postDiscordWebhook(url, record, fetchImpl = fetch) {
   }
 
   if (!response.ok) throw new Error(`Discord Webhook failed: HTTP ${response.status}`);
-  return { skipped: false, jacketUploaded: Boolean(jacket) };
+  const message = await response.json();
+  if (!message?.id) throw new Error("Discord Webhook succeeded but returned no message ID.");
+  return { skipped: false, jacketUploaded: Boolean(jacket), messageId: String(message.id) };
+}
+
+export async function deleteDiscordWebhookMessage(url, messageId, fetchImpl = fetch) {
+  if (!url) return { skipped: true, reason: "DISCORD_WEBHOOK_URL is not set" };
+  if (!messageId) return { skipped: true, reason: "Discord message ID is not set" };
+  const response = await fetchImpl(webhookMessageUrl(url, messageId), { method: "DELETE" });
+  if (response.status === 404) return { skipped: false, alreadyDeleted: true };
+  if (!response.ok) throw new Error(`Discord message delete failed: HTTP ${response.status}`);
+  return { skipped: false, alreadyDeleted: false };
+}
+
+export function isChallengeExpired(record, now = new Date()) {
+  const deadline = deadlineDate(record);
+  return !Number.isNaN(deadline.getTime()) && now.getTime() >= deadline.getTime();
 }
