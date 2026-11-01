@@ -2,8 +2,8 @@ name: Draw scheduled challenge
 
 on:
   schedule:
-    # 毎日 06:05 JSTに起動し、config/schedules.jsonで当日が週/月課題日か判定します。
-    - cron: "5 21 * * *"
+    # 毎日 08:30 JSTに起動し、08:00の楽曲データ更新後にconfig/schedules.jsonで当日が週/月課題日か判定します。
+    - cron: "30 23 * * *"
   workflow_dispatch:
     inputs:
       challenge_type:
@@ -60,4 +60,3 @@ jobs:
             git commit -m "chore: record scheduled challenge"
             git push
           fi
-
