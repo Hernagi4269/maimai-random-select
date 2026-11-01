@@ -7,8 +7,8 @@ on:
     workflows: ["Draw scheduled challenge"]
     types: [completed]
   schedule:
-    # 毎日 05:30 JST。公式データを再取得して現行曲へ追従します。
-    - cron: "30 20 * * *"
+    # 毎日 08:00 JST。SEGA系サービスの定期メンテナンス時間帯を避けて公式データを再取得します。
+    - cron: "0 23 * * *"
   workflow_dispatch:
 
 permissions:
@@ -48,4 +48,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
