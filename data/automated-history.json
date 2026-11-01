@@ -2,6 +2,48 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "weekly:2026-W45",
+      "source": "weekly",
+      "periodKey": "2026-W45",
+      "drawnAt": "2026-11-01T15:08:01.705Z",
+      "chart": {
+        "songId": "sega-1328-s4vo3y",
+        "title": "Raven Emperor",
+        "artist": "Kobaryo",
+        "genre": "maimai",
+        "version": "UNiVERSE",
+        "versionCode": "22007",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/000e4e52cbf4d11f.png",
+        "available": true,
+        "chartId": "sega-1328-s4vo3y:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "14",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "13+",
+        "levelMax": "14+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false
+    },
+    {
       "id": "weekly:2026-W44",
       "source": "weekly",
       "periodKey": "2026-W44",
