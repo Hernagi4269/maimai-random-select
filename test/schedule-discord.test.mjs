@@ -38,13 +38,26 @@ test("Discord Embedに曲・譜面・Lv・タイプ・目標・ジャケット�
   assert.deepEqual(payload.allowed_mentions, { parse: [] });
 });
 
-test("Discord送信処理を外部送信なしでモック検証できる", async () => {
-  let request;
-  const result = await postDiscordWebhook("https://example.invalid/webhook", record, async (url, options) => {
-    request = { url, options };
+test("ジャケットを取得してDiscordへ添付画像として送信する", async () => {
+  const requests = [];
+  const result = await postDiscordWebhook("https://example.invalid/webhook", record, async (url, options = {}) => {
+    requests.push({ url, options });
+    if (url === record.chart.imageUrl) {
+      return {
+        ok: true,
+        status: 200,
+        headers: { get: () => "image/png" },
+        arrayBuffer: async () => new Uint8Array([137, 80, 78, 71]).buffer,
+      };
+    }
     return { ok: true, status: 204 };
   });
   assert.equal(result.skipped, false);
-  assert.equal(request.options.method, "POST");
-  assert.equal(JSON.parse(request.options.body).embeds[0].footer.text, "課題ID: weekly:2026-W45");
+  assert.equal(result.jacketUploaded, true);
+  assert.equal(requests.length, 2);
+  assert.equal(requests[1].options.method, "POST");
+  assert.ok(requests[1].options.body instanceof FormData);
+  const payload = JSON.parse(requests[1].options.body.get("payload_json"));
+  assert.equal(payload.embeds[0].thumbnail.url, "attachment://jacket.png");
+  assert.equal(payload.embeds[0].footer.text, "課題ID: weekly:2026-W45");
 });
