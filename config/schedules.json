@@ -3,6 +3,7 @@
   "weekly": {
     "enabled": true,
     "weekDay": 1,
+    "count": 3,
     "achievement": "AP",
     "filters": {
       "difficulties": ["MASTER"],
@@ -22,6 +23,7 @@
   "monthly": {
     "enabled": true,
     "dayOfMonth": 1,
+    "count": 1,
     "achievement": "SSS+",
     "filters": {
       "difficulties": ["MASTER", "Re:MASTER"],
@@ -39,4 +41,3 @@
     }
   }
 }
-
