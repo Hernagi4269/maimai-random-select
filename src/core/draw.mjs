@@ -23,6 +23,7 @@ export function flattenCharts(songDatabase) {
       genre: song.genre,
       version: song.version,
       versionCode: song.versionCode,
+      imageUrl: song.imageUrl ?? null,
       available: song.available !== false,
       ...chart,
     })))
@@ -115,4 +116,3 @@ export function createHistoryRecord({ source, result, filters, exclusion, now = 
     exclusionRelaxed: result.exclusionRelaxed,
   };
 }
-
