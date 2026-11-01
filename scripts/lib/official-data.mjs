@@ -1,4 +1,5 @@
 const SOURCE_URL = "https://maimai.sega.jp/data/maimai_songs.json";
+const IMAGE_BASE_URL = "https://maimaidx.jp/maimai-mobile/img/Music/";
 const DIFFICULTY_FIELDS = [
   ["bas", "BASIC"],
   ["adv", "ADVANCED"],
@@ -60,6 +61,7 @@ export function normalizeOfficialSongs(rawSongs, metadata = {}) {
   const songs = rawSongs.map((raw) => {
     const stableSourceKey = `${raw.sort ?? ""}|${raw.title ?? ""}|${raw.artist ?? ""}`;
     const songId = `sega-${raw.sort ?? "x"}-${hash(stableSourceKey)}`;
+    const imageFile = String(raw.image_url ?? "").trim();
     return {
       songId,
       sourceSongId: raw.sort ? String(raw.sort) : null,
@@ -70,6 +72,7 @@ export function normalizeOfficialSongs(rawSongs, metadata = {}) {
       versionCode: String(raw.version ?? ""),
       version: versionName(raw.version),
       release: String(raw.release ?? "") || null,
+      imageUrl: imageFile ? new URL(imageFile, IMAGE_BASE_URL).toString() : null,
       available: true,
       charts: normalizeCharts(raw, songId),
     };
@@ -85,7 +88,7 @@ export function normalizeOfficialSongs(rawSongs, metadata = {}) {
       url: SOURCE_URL,
       fetchedAt: metadata.fetchedAt ?? new Date().toISOString(),
       lastModified: metadata.lastModified ?? null,
-      note: "公式画像は収録せず、公開中の選曲メタデータだけを正規化しています。",
+      note: "公式楽曲リストのimage_urlからジャケット画像URLを参照し、画像ファイル自体は保存しません。",
     },
     songs,
     stats: { songs: songs.length, charts: chartIds.length },
@@ -104,5 +107,4 @@ export async function fetchOfficialSongs(fetchImpl = fetch) {
   });
 }
 
-export { SOURCE_URL, versionName };
-
+export { SOURCE_URL, IMAGE_BASE_URL, versionName };
