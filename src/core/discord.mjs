@@ -1,4 +1,22 @@
 const COLORS = { weekly: 0x6de2c8, monthly: 0xffc857, manual: 0xb79cff };
+const DEADLINE_DAYS = 21;
+
+function deadlineAt(record) {
+  if (record.deadlineAt) return new Date(record.deadlineAt);
+  const deadline = new Date(record.drawnAt);
+  deadline.setUTCDate(deadline.getUTCDate() + DEADLINE_DAYS);
+  return deadline;
+}
+
+function formatDeadline(record) {
+  return new Intl.DateTimeFormat("ja-JP", {
+    timeZone: "Asia/Tokyo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+  }).format(deadlineAt(record));
+}
 
 export function buildDiscordPayload(record, options = {}) {
   const labels = { weekly: "今週のmaimai課題曲", monthly: "今月のmaimai課題曲", manual: "maimai課題曲" };
@@ -12,6 +30,7 @@ export function buildDiscordPayload(record, options = {}) {
       { name: "Lv", value: chart.displayLevel, inline: true },
       { name: "タイプ", value: chart.type, inline: true },
       { name: "目標", value: record.achievement, inline: true },
+      { name: "期限", value: `${formatDeadline(record)}（抽選から3週間）`, inline: true },
       { name: "ジャンル", value: chart.genre || "—", inline: true },
       { name: "追加Ver.", value: chart.version || "—", inline: true },
     ],
