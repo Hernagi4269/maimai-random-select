@@ -4,7 +4,7 @@ import { randomInt } from "node:crypto";
 import { fetchOfficialSongs } from "./lib/official-data.mjs";
 import { createHistoryRecord, drawChallenge } from "../src/core/draw.mjs";
 import { dueScheduleTypes, periodKey } from "../src/core/schedule.mjs";
-import { postDiscordWebhook } from "../src/core/discord.mjs";
+import { deleteDiscordWebhookMessage, isChallengeExpired, postDiscordWebhook } from "../src/core/discord.mjs";
 
 const root = resolve(import.meta.dirname, "..");
 const config = JSON.parse(await readFile(resolve(root, "config", "schedules.json"), "utf8"));
@@ -18,13 +18,28 @@ const manualRun = Boolean(process.env.CHALLENGE_TYPE);
 const now = process.env.NOW ? new Date(process.env.NOW) : new Date();
 const modes = dueScheduleTypes(config, now, modeArg);
 
-if (modes.length === 0) {
-  console.log("No challenge is due today.");
-  process.exit(0);
-}
-
 if (notify && !process.env.DISCORD_WEBHOOK_URL) {
   throw new Error("Discord notification was requested, but DISCORD_WEBHOOK_URL is not set.");
+}
+
+let historyChanged = false;
+if (notify && !dryRun) {
+  for (const record of history) {
+    if (!record.discordMessageId || record.discordDeletedAt || !isChallengeExpired(record, now)) continue;
+    const result = await deleteDiscordWebhookMessage(process.env.DISCORD_WEBHOOK_URL, record.discordMessageId);
+    if (result.skipped) throw new Error(`Discord delete skipped unexpectedly: ${result.reason}`);
+    record.discordDeletedAt = now.toISOString();
+    historyChanged = true;
+    console.log(`Discord expired message deleted: ${record.id}`);
+  }
+}
+
+if (modes.length === 0) {
+  if (historyChanged) {
+    await writeFile(historyPath, `${JSON.stringify({ schemaVersion: 1, records: history }, null, 2)}\n`, "utf8");
+  }
+  console.log("No challenge is due today.");
+  process.exit(0);
 }
 
 const database = await fetchOfficialSongs();
@@ -44,7 +59,7 @@ for (const source of modes) {
   if (existing) {
     console.log(`Already exists: ${id}`);
     if (manualRun && notify) {
-      toNotify.push(withCurrentSongMetadata(existing));
+      toNotify.push({ storedRecord: existing, sendRecord: withCurrentSongMetadata(existing) });
       console.log(`Manual run: existing challenge will be resent to Discord: ${id}`);
     }
     continue;
@@ -68,24 +83,32 @@ for (const source of modes) {
   });
   history.unshift(record);
   created.push(record);
-  toNotify.push(record);
+  toNotify.push({ storedRecord: record, sendRecord: record });
+  historyChanged = true;
   console.log(`${source}: ${record.chart.title} / ${record.chart.difficulty} ${record.chart.displayLevel} ${record.chart.type}`);
 }
 
-if (created.length === 0 && toNotify.length === 0) process.exit(0);
 if (dryRun) {
   console.log("Dry run: history and Discord were not changed.");
   process.exit(0);
 }
 
-if (created.length > 0) {
-  await writeFile(historyPath, `${JSON.stringify({ schemaVersion: 1, records: history }, null, 2)}\n`, "utf8");
+if (notify) {
+  for (const { storedRecord, sendRecord } of toNotify) {
+    if (storedRecord.discordMessageId && !storedRecord.discordDeletedAt) {
+      const oldResult = await deleteDiscordWebhookMessage(process.env.DISCORD_WEBHOOK_URL, storedRecord.discordMessageId);
+      if (oldResult.skipped) throw new Error(`Discord replacement delete skipped unexpectedly: ${oldResult.reason}`);
+      console.log(`Discord previous message deleted before resend: ${storedRecord.id}`);
+    }
+    const result = await postDiscordWebhook(process.env.DISCORD_WEBHOOK_URL, sendRecord);
+    if (result.skipped) throw new Error(`Discord skipped unexpectedly: ${result.reason}`);
+    storedRecord.discordMessageId = result.messageId;
+    storedRecord.discordDeletedAt = null;
+    historyChanged = true;
+    console.log(`Discord sent: ${storedRecord.id} / message ${result.messageId}`);
+  }
 }
 
-if (notify) {
-  for (const record of toNotify) {
-    const result = await postDiscordWebhook(process.env.DISCORD_WEBHOOK_URL, record);
-    if (result.skipped) throw new Error(`Discord skipped unexpectedly: ${result.reason}`);
-    console.log(`Discord sent: ${record.id}`);
-  }
+if (historyChanged) {
+  await writeFile(historyPath, `${JSON.stringify({ schemaVersion: 1, records: history }, null, 2)}\n`, "utf8");
 }
