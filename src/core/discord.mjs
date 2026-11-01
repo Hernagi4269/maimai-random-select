@@ -20,7 +20,7 @@ function formatDeadline(record) {
   }).format(date);
 }
 
-export function buildDiscordPayload(record, options = {}) {
+export function buildDiscordPayload(record) {
   const labels = { weekly: "今週のmaimai課題曲", monthly: "今月のmaimai課題曲", manual: "maimai課題曲" };
   const chart = record.chart;
   const embed = {
@@ -40,60 +40,11 @@ export function buildDiscordPayload(record, options = {}) {
     timestamp: record.drawnAt,
   };
 
-  if (options.attachmentName) embed.thumbnail = { url: `attachment://${options.attachmentName}` };
-  else if (chart.imageUrl) embed.thumbnail = { url: chart.imageUrl };
-
   return {
     username: "maimai 課題曲セレクター",
     allowed_mentions: { parse: [] },
     embeds: [embed],
   };
-}
-
-function jacketCandidates(chart) {
-  const candidates = [];
-  if (chart.imageUrl) candidates.push({ url: chart.imageUrl, referer: "https://maimai.sega.jp/", source: "SEGA/maimai DX NET" });
-
-  const numericId = Number.parseInt(chart.sourceSongId, 10);
-  if (Number.isFinite(numericId) && numericId > 0) {
-    const divingFishId = numericId > 10000 && numericId <= 11000 ? numericId - 10000 : numericId;
-    candidates.push({
-      url: `https://www.diving-fish.com/covers/${String(divingFishId).padStart(5, "0")}.png`,
-      referer: "https://maimai.diving-fish.com/",
-      source: "Diving-Fish",
-    });
-    candidates.push({
-      url: `https://assets2.lxns.net/maimai/jacket/${numericId}.png`,
-      referer: "https://maimai.lxns.net/",
-      source: "LXNS",
-    });
-  }
-  return candidates;
-}
-
-async function fetchJacket(chart, fetchImpl) {
-  for (const candidate of jacketCandidates(chart)) {
-    try {
-      const response = await fetchImpl(candidate.url, {
-        headers: {
-          "user-agent": "Mozilla/5.0 maimai-random-select/1.0",
-          referer: candidate.referer,
-        },
-      });
-      if (!response.ok) {
-        console.warn(`Jacket fetch failed (${candidate.source}): HTTP ${response.status}`);
-        continue;
-      }
-      const contentType = response.headers?.get?.("content-type") || "image/png";
-      const bytes = await response.arrayBuffer();
-      if (!bytes.byteLength) continue;
-      console.log(`Jacket fetched from ${candidate.source}`);
-      return { bytes, contentType, source: candidate.source };
-    } catch (error) {
-      console.warn(`Jacket fetch failed (${candidate.source}): ${error.message}`);
-    }
-  }
-  return null;
 }
 
 function webhookMessageUrl(url, messageId) {
@@ -103,29 +54,17 @@ function webhookMessageUrl(url, messageId) {
 export async function postDiscordWebhook(url, record, fetchImpl = fetch) {
   if (!url) return { skipped: true, reason: "DISCORD_WEBHOOK_URL is not set" };
 
-  const jacket = await fetchJacket(record.chart, fetchImpl);
   const targetUrl = `${url}${url.includes("?") ? "&" : "?"}wait=true`;
-  let response;
-
-  if (jacket) {
-    const extension = jacket.contentType.includes("jpeg") ? "jpg" : jacket.contentType.includes("webp") ? "webp" : "png";
-    const attachmentName = `jacket.${extension}`;
-    const form = new FormData();
-    form.append("payload_json", JSON.stringify(buildDiscordPayload(record, { attachmentName })));
-    form.append("files[0]", new Blob([jacket.bytes], { type: jacket.contentType }), attachmentName);
-    response = await fetchImpl(targetUrl, { method: "POST", body: form });
-  } else {
-    response = await fetchImpl(targetUrl, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(buildDiscordPayload(record)),
-    });
-  }
+  const response = await fetchImpl(targetUrl, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(buildDiscordPayload(record)),
+  });
 
   if (!response.ok) throw new Error(`Discord Webhook failed: HTTP ${response.status}`);
   const message = await response.json();
   if (!message?.id) throw new Error("Discord Webhook succeeded but returned no message ID.");
-  return { skipped: false, jacketUploaded: Boolean(jacket), jacketSource: jacket?.source ?? null, messageId: String(message.id) };
+  return { skipped: false, jacketUploaded: false, jacketSource: null, messageId: String(message.id) };
 }
 
 export async function deleteDiscordWebhookMessage(url, messageId, fetchImpl = fetch) {
