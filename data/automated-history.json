@@ -2,6 +2,144 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "weekly:2026-W45:3",
+      "source": "weekly",
+      "periodKey": "2026-W45:3",
+      "drawnAt": "2026-11-02T02:39:55.426Z",
+      "deadlineAt": "2026-11-23T02:39:55.426Z",
+      "chart": {
+        "songId": "sega-46-uah20m",
+        "sourceSongId": "46",
+        "title": "うぇいびー",
+        "artist": "三枝明那",
+        "genre": "POPS＆アニメ",
+        "version": "PRiSM PLUS",
+        "versionCode": "25509",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/4516b8b8e6cb4d7c.png",
+        "available": true,
+        "chartId": "sega-46-uah20m:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566642997054148741",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W45:2",
+      "source": "weekly",
+      "periodKey": "2026-W45:2",
+      "drawnAt": "2026-11-02T02:39:55.426Z",
+      "deadlineAt": "2026-11-23T02:39:55.426Z",
+      "chart": {
+        "songId": "sega-78-232aee",
+        "sourceSongId": "78",
+        "title": "INTJINTPENTJENTPINFJENFJINFPENFPISTJISFJESTJESFJESTPISTPISFPESFP",
+        "artist": "3markets[ ]",
+        "genre": "POPS＆アニメ",
+        "version": "CiRCLE",
+        "versionCode": "26011",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/8e5cbe0e7b8a325b.png",
+        "available": true,
+        "chartId": "sega-78-232aee:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566642995841998894",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W45:1",
+      "source": "weekly",
+      "periodKey": "2026-W45:1",
+      "drawnAt": "2026-11-02T02:39:55.426Z",
+      "deadlineAt": "2026-11-23T02:39:55.426Z",
+      "chart": {
+        "songId": "sega-1116-1kelvhi",
+        "sourceSongId": "1116",
+        "title": "オリフィス",
+        "artist": "40mP feat. シャノ",
+        "genre": "maimai",
+        "version": "Splash",
+        "versionCode": "21006",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/32f13971dcdc12f7.png",
+        "available": true,
+        "chartId": "sega-1116-1kelvhi:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "12+",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1566642995208519733",
+      "discordDeletedAt": null
+    },
+    {
       "id": "weekly:2026-W45-manual-2026-11-01T15-48-50-194Z-3",
       "source": "weekly",
       "periodKey": "2026-W45-manual-2026-11-01T15-48-50-194Z-3",
