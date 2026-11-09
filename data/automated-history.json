@@ -2,6 +2,144 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "weekly:2026-W46:3",
+      "source": "weekly",
+      "periodKey": "2026-W46:3",
+      "drawnAt": "2026-11-09T02:51:22.936Z",
+      "deadlineAt": "2026-11-30T02:51:22.936Z",
+      "chart": {
+        "songId": "sega-1517-7cxc2k",
+        "sourceSongId": "1517",
+        "title": "サウンドプレイヤー",
+        "artist": "tilt-six feat.バル",
+        "genre": "オンゲキ＆CHUNITHM",
+        "version": "PRiSM PLUS",
+        "versionCode": "25512",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/9099bf55e3eb446a.png",
+        "available": true,
+        "chartId": "sega-1517-7cxc2k:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13+",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1569182596607516814",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W46:2",
+      "source": "weekly",
+      "periodKey": "2026-W46:2",
+      "drawnAt": "2026-11-09T02:51:22.936Z",
+      "deadlineAt": "2026-11-30T02:51:22.936Z",
+      "chart": {
+        "songId": "sega-14-3npiui",
+        "sourceSongId": "14",
+        "title": "モエチャッカファイア",
+        "artist": "弌誠「ゲーム『ゼンレスゾーンゼロ』エレン・ジョー 同人イメージソング」",
+        "genre": "POPS＆アニメ",
+        "version": "PRiSM PLUS",
+        "versionCode": "25501",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/9eb45829c19ecb95.png",
+        "available": true,
+        "chartId": "sega-14-3npiui:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13+",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1569182595814654085",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W46:1",
+      "source": "weekly",
+      "periodKey": "2026-W46:1",
+      "drawnAt": "2026-11-09T02:51:22.936Z",
+      "deadlineAt": "2026-11-30T02:51:22.936Z",
+      "chart": {
+        "songId": "sega-1537-13hta3h",
+        "sourceSongId": "1537",
+        "title": "Bad Apple!! feat.nomico ～五十嵐 撫子 Ver.～",
+        "artist": "Masayoshi Minoshima [covered by 五十嵐 撫子(CV:花井 美春)]",
+        "genre": "オンゲキ＆CHUNITHM",
+        "version": "FESTiVAL PLUS",
+        "versionCode": "23506",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/69815c3a46ef8b0f.png",
+        "available": true,
+        "chartId": "sega-1537-13hta3h:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1569182595072397353",
+      "discordDeletedAt": null
+    },
+    {
       "id": "weekly:2026-W45:3",
       "source": "weekly",
       "periodKey": "2026-W45:3",
