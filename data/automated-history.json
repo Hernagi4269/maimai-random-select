@@ -2,6 +2,144 @@
   "schemaVersion": 1,
   "records": [
     {
+      "id": "weekly:2026-W48-manual-2026-11-23T15-52-23-488Z-3",
+      "source": "weekly",
+      "periodKey": "2026-W48-manual-2026-11-23T15-52-23-488Z-3",
+      "drawnAt": "2026-11-23T15:52:23.488Z",
+      "deadlineAt": "2026-12-14T15:52:23.488Z",
+      "chart": {
+        "songId": "sega-32-xudonv",
+        "sourceSongId": "32",
+        "title": "マツケンサンバⅡ",
+        "artist": "松平健 [covered by 光吉猛修]",
+        "genre": "POPS＆アニメ",
+        "version": "PRiSM",
+        "versionCode": "25000",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/3dd9d507a078c2b1.png",
+        "available": true,
+        "chartId": "sega-32-xudonv:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "12+",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1574452591771910275",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W48-manual-2026-11-23T15-52-23-488Z-2",
+      "source": "weekly",
+      "periodKey": "2026-W48-manual-2026-11-23T15-52-23-488Z-2",
+      "drawnAt": "2026-11-23T15:52:23.488Z",
+      "deadlineAt": "2026-12-14T15:52:23.488Z",
+      "chart": {
+        "songId": "sega-1467-11hibwh",
+        "sourceSongId": "1467",
+        "title": "ぱくぱく☆がーる",
+        "artist": "曲：齋藤大／歌：珠洲島 有栖(CV：長縄 まりあ)",
+        "genre": "オンゲキ＆CHUNITHM",
+        "version": "UNiVERSE",
+        "versionCode": "22011",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/07f841698cba7fa8.png",
+        "available": true,
+        "chartId": "sega-1467-11hibwh:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1574452590853234729",
+      "discordDeletedAt": null
+    },
+    {
+      "id": "weekly:2026-W48-manual-2026-11-23T15-52-23-488Z-1",
+      "source": "weekly",
+      "periodKey": "2026-W48-manual-2026-11-23T15-52-23-488Z-1",
+      "drawnAt": "2026-11-23T15:52:23.488Z",
+      "deadlineAt": "2026-12-14T15:52:23.488Z",
+      "chart": {
+        "songId": "sega-1088-1mbxh34",
+        "sourceSongId": "1088",
+        "title": "Beginning together!",
+        "artist": "高瀬一矢 feat. R.I.N.A",
+        "genre": "maimai",
+        "version": "BUDDiES PLUS",
+        "versionCode": "24507",
+        "imageUrl": "https://maimaidx.jp/maimai-mobile/img/Music/091204c68ec374bc.png",
+        "available": true,
+        "chartId": "sega-1088-1mbxh34:DX:MASTER",
+        "difficulty": "MASTER",
+        "displayLevel": "13+",
+        "internalLevel": null,
+        "type": "DX"
+      },
+      "achievement": "AP",
+      "filters": {
+        "difficulties": [
+          "MASTER"
+        ],
+        "levelMin": "12",
+        "levelMax": "13+",
+        "types": [
+          "STD",
+          "DX"
+        ],
+        "genres": [],
+        "versions": []
+      },
+      "exclusion": {
+        "unit": "song",
+        "recentCount": 12,
+        "days": 84,
+        "relaxWhenEmpty": true
+      },
+      "exclusionRelaxed": false,
+      "discordMessageId": "1574452586755653643",
+      "discordDeletedAt": null
+    },
+    {
       "id": "weekly:2026-W47:3",
       "source": "weekly",
       "periodKey": "2026-W47:3",
@@ -321,7 +459,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566642997054148741",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45:2",
@@ -367,7 +505,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566642995841998894",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45:1",
@@ -413,7 +551,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566642995208519733",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-48-50-194Z-3",
@@ -459,7 +597,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566479144416579695",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-48-50-194Z-2",
@@ -505,7 +643,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566479143611269172",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-48-50-194Z-1",
@@ -551,7 +689,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566479142487072945",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-40-27-503Z-3",
@@ -597,7 +735,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566477035906277528",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-40-27-503Z-2",
@@ -643,7 +781,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566477034773938288",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-40-27-503Z-1",
@@ -689,7 +827,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566477034384007311",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-24-35-257Z-3",
@@ -735,7 +873,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566473076642680873",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-24-35-257Z-2",
@@ -781,7 +919,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566473068162056313",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45-manual-2026-11-01T15-24-35-257Z-1",
@@ -827,7 +965,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566473059269873746",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W45",
@@ -871,7 +1009,7 @@
       },
       "exclusionRelaxed": false,
       "discordMessageId": "1566470576334180436",
-      "discordDeletedAt": null
+      "discordDeletedAt": "2026-11-23T15:52:23.488Z"
     },
     {
       "id": "weekly:2026-W44",
