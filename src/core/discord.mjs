@@ -70,10 +70,26 @@ export async function postDiscordWebhook(url, record, fetchImpl = fetch) {
 export async function deleteDiscordWebhookMessage(url, messageId, fetchImpl = fetch) {
   if (!url) return { skipped: true, reason: "DISCORD_WEBHOOK_URL is not set" };
   if (!messageId) return { skipped: true, reason: "Discord message ID is not set" };
-  const response = await fetchImpl(webhookMessageUrl(url, messageId), { method: "DELETE" });
-  if (response.status === 404) return { skipped: false, alreadyDeleted: true };
-  if (!response.ok) throw new Error(`Discord message delete failed: HTTP ${response.status}`);
-  return { skipped: false, alreadyDeleted: false };
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    const response = await fetchImpl(webhookMessageUrl(url, messageId), { method: "DELETE" });
+    if (response.status === 404) return { skipped: false, alreadyDeleted: true };
+    if (response.ok) return { skipped: false, alreadyDeleted: false };
+    if (response.status !== 429 || attempt === 3) {
+      throw new Error(`Discord message delete failed: HTTP ${response.status}`);
+    }
+    const retryAfterHeader = Number(response.headers?.get?.("retry-after"));
+    let retryAfterBody = NaN;
+    try {
+      const body = await response.json();
+      retryAfterBody = Number(body?.retry_after);
+    } catch {
+      // Discord may return an empty or non-JSON response.
+    }
+    const seconds = Number.isFinite(retryAfterBody) && retryAfterBody >= 0
+      ? retryAfterBody
+      : Number.isFinite(retryAfterHeader) && retryAfterHeader >= 0 ? retryAfterHeader : 2;
+    await new Promise((resolve) => setTimeout(resolve, Math.min(60_000, Math.max(1_000, seconds * 1_000 + 250))));
+  }
 }
 
 export function isChallengeExpired(record, now = new Date()) {
