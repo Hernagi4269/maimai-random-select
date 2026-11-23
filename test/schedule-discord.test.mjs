@@ -71,3 +71,21 @@ test("WebhookメッセージをID指定で削除できる", async () => {
   assert.equal(request.url, "https://example.invalid/webhook/messages/123456789");
   assert.equal(request.options.method, "DELETE");
 });
+
+test("Discord削除が429の場合はretry_afterに従って再試行する", async () => {
+  let attempts = 0;
+  const result = await deleteDiscordWebhookMessage("https://example.invalid/webhook", "123456789", async () => {
+    attempts += 1;
+    if (attempts === 1) {
+      return {
+        ok: false,
+        status: 429,
+        headers: { get: () => "0" },
+        json: async () => ({ retry_after: 0 }),
+      };
+    }
+    return { ok: true, status: 204 };
+  });
+  assert.equal(result.skipped, false);
+  assert.equal(attempts, 2);
+});
