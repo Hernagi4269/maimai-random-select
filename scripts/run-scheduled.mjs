@@ -26,11 +26,17 @@ let historyChanged = false;
 if (notify && !dryRun) {
   for (const record of history) {
     if (!record.discordMessageId || record.discordDeletedAt || !isChallengeExpired(record, now)) continue;
-    const result = await deleteDiscordWebhookMessage(process.env.DISCORD_WEBHOOK_URL, record.discordMessageId);
-    if (result.skipped) throw new Error(`Discord delete skipped unexpectedly: ${result.reason}`);
-    record.discordDeletedAt = now.toISOString();
-    historyChanged = true;
-    console.log(`Discord expired message deleted: ${record.id}`);
+    try {
+      const result = await deleteDiscordWebhookMessage(process.env.DISCORD_WEBHOOK_URL, record.discordMessageId);
+      if (result.skipped) throw new Error(`Discord delete skipped unexpectedly: ${result.reason}`);
+      record.discordDeletedAt = now.toISOString();
+      historyChanged = true;
+      console.log(`Discord expired message deleted: ${record.id}`);
+    } catch (error) {
+      // Cleanup must never block the weekly/monthly challenge draw.
+      // Keep the message ID so a later scheduled run can retry deletion.
+      console.warn(`Discord expired message cleanup deferred: ${record.id} / ${error.message}`);
+    }
   }
 }
 
